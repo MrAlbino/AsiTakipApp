@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "120941159869",
+    "project_id": "asitakipuygulamasi",
+    "storage_bucket": "asitakipuygulamasi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120941159869:android:1b2f3a3f4a4ee499dc1ed4",
+        "android_client_info": {
+          "package_name": "com.abe.asi_takip"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "120941159869-gs54t1ogtus6vcmm969u6mmrj4aggvbv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.abe.asi_takip",
+            "certificate_hash": "7ae434aeb7608d01e317755cb6bc5bddcd1a5603"
+          }
+        },
+        {
+          "client_id": "120941159869-nfic4l9b5n46k01igie4a1t6a7qhdg0b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqZ2zYlVVk-rPphBlXJk4WVXgU4AFiu6Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "120941159869-nfic4l9b5n46k01igie4a1t6a7qhdg0b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
