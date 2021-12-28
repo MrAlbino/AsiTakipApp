@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
 
@@ -31,10 +33,11 @@ class _ChildrenPageState extends State<ChildrenPage>{
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference todosRef= _fs.collection('todos');
+    CollectionReference todosRef= _fs.collection('Children');
     CollectionReference _usersRef= _fs.collection('Users');
     final User? user =_auth.currentUser;
     final userId = user!.uid;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -51,7 +54,7 @@ class _ChildrenPageState extends State<ChildrenPage>{
             children: [
               StreamBuilder<QuerySnapshot>(
                 /// Neyi dinlediğimiz bilgisi, hangi streami
-                stream: todosRef.where('user' ,isEqualTo: userId).snapshots(),
+                stream: todosRef.where('parent' ,isEqualTo: userId).snapshots(),
                 /// Streamden her yerni veri aktığında, aşağıdaki metodu çalıştır
                 builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
                   if (asyncSnapshot.hasError) {
@@ -66,18 +69,17 @@ class _ChildrenPageState extends State<ChildrenPage>{
                           itemCount: listOfDocumentSnap.length,
                           itemBuilder: (context, index) {
                             return Card(
-                              color:getMyColor(DateTime.parse((listOfDocumentSnap[index]['deadline']).toDate().toString()),listOfDocumentSnap[index]['done']) ,
 
                               child: ListTile(
                                 title: Text(
-                                    '${listOfDocumentSnap[index]['name']}',
+                                    '${listOfDocumentSnap[index]['name']+" "+listOfDocumentSnap[index]['surname']}',
                                     style: const TextStyle(fontSize: 24)),
                                 subtitle: Text(
-                                    '${DateTime.parse((listOfDocumentSnap[index]['deadline']).toDate().toString())}',
+                                    DateFormat('dd-MM-yyyy').format(DateTime.parse((listOfDocumentSnap[index]['birthOfDate']).toDate().toString())),
                                     style: const TextStyle(fontSize: 16)),
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
-                                  children: [  if(listOfDocumentSnap[index]['done'])...[
+                                  children: [
                                     IconButton(
                                       icon: const Icon(Icons.delete),
                                       onPressed: () async {
@@ -85,31 +87,10 @@ class _ChildrenPageState extends State<ChildrenPage>{
                                         await listOfDocumentSnap[index]
                                             .reference
                                             .delete();
-                                        _usersRef.doc(userId).update({'todo_list':FieldValue.arrayRemove([todoId])});
+                                        _usersRef.doc(userId).update({'children':FieldValue.arrayRemove([todoId])});
                                       },
                                     ),
-                                  ]
-                                  else if(DateTime.now().isBefore(DateTime.parse((listOfDocumentSnap[index]['deadline']).toDate().toString())))...[
-                                      IconButton(
-                                        icon: const Icon(Icons.assignment_turned_in),
-                                        onPressed: () async {
-                                          await listOfDocumentSnap[index]
-                                              .reference
-                                              .update({'done':true});
-                                        },
-                                      ),
-                                      IconButton(
-                                        icon: const Icon(Icons.delete),
-                                        onPressed: () async {
-                                          var todoId= listOfDocumentSnap[index].id;
-                                          await listOfDocumentSnap[index]
-                                              .reference
-                                              .delete();
-                                          _usersRef.doc(userId).update({'todo_list':FieldValue.arrayRemove([todoId])});
-                                        },
-                                      ),
                                     ]
-                                  ],
                                 ),
                               ),
                             );

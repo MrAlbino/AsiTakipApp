@@ -66,6 +66,7 @@ class _AddChildPage extends State<AddChildPage>{
             children: [
               Expanded(
                 flex: 2,
+
                 child: MyContainer(child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children:  [
@@ -78,6 +79,10 @@ class _AddChildPage extends State<AddChildPage>{
                         color: Colors.black54,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
+                      ),
+                      decoration: InputDecoration(
+
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       ),
                       controller: nameController,
                     ),
@@ -99,6 +104,10 @@ class _AddChildPage extends State<AddChildPage>{
                         color: Colors.black54,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
+                      ),
+                      decoration: InputDecoration(
+
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       ),
                       controller: surnameController,
                     ),
@@ -137,6 +146,7 @@ class _AddChildPage extends State<AddChildPage>{
                     Map<String, dynamic> childData= {
                       'name': nameController.text,
                       'surname': surnameController.text,
+                      'parent': userId,
                       'birthOfDate': selectedDate,
                     };
 
@@ -175,6 +185,7 @@ class MyContainer extends StatelessWidget {
       child: child,
       margin: const EdgeInsets.fromLTRB(12,5,12,0),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)
+
         ,color: colorUser,
       ),
     );
