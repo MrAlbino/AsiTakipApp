@@ -1,6 +1,6 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'dart:async';
 import './home.dart';
 //import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:uuid/uuid.dart';
@@ -20,8 +20,20 @@ class AddChildPage extends StatefulWidget{
 }
 
 class _AddChildPage extends State<AddChildPage>{
-  double _destinationDay=1;
 
+  DateTime selectedDate = DateTime.now();
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
+  }
 
   //final _fs=  FirebaseFirestore.instance;
 
@@ -32,10 +44,6 @@ class _AddChildPage extends State<AddChildPage>{
 
   @override
   Widget build(BuildContext context) {
-    //CollectionReference todosRef= _fs.collection('todos');
-    //CollectionReference todosRef= _fs.collection('testCollection');
-    //CollectionReference todosRef= _fs.collection('todos');
-    //CollectionReference usersRef= _fs.collection('Users');
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -102,57 +110,21 @@ class _AddChildPage extends State<AddChildPage>{
                 child: MyContainer(child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children:  [
-                    const Text("Dogum Tarihi",style:TextStyle(
-                        color:Colors.black54,fontSize: 20,fontWeight: FontWeight.bold
-                    ),
-                    ),
-                    DateTimePicker(
-                      initialValue: '',
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100),
-                      dateLabelText: 'Date',
-                      onChanged: (val) => print(val),
-                      validator: (val) {
-                        print(val);
-                        return null;
-                      },
-                      onSaved: (val) => print(val),
-                    )
-                  ],
-                )
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: MyContainer(child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Hedef Gün",style:TextStyle(
-                        color:Colors.black54,fontSize: 20,fontWeight: FontWeight.bold
-                    ),
-                    ),
-                    Text(_destinationDay.round().toString(), style: const TextStyle(
-                        color:Colors.lightBlue,fontSize: 25,fontWeight: FontWeight.bold
-                    ),
-                    ),
-                    Slider(
-                      thumbColor: Colors.orange,
-                      max: 365,
-                      min:1,
-                      value: _destinationDay,
-                      onChanged: (double value){
-                        setState(() {
-                          _destinationDay = value;
 
-                        });
-                      },
+                    Text("${selectedDate.toLocal()}".split(' ')[0],style:TextStyle(
+                        color:Colors.black54,fontSize: 20,fontWeight: FontWeight.bold
+                    ),),
+                    SizedBox(height: 20.0,),
+
+
+                    ElevatedButton(
+                      onPressed: () => _selectDate(context),
+                      child: Text('Doğum Tarihini Seçiniz'),
                     ),
                   ],
                 )
                 ),
               ),
-
-
             ],
           ),
         ),
