@@ -1,6 +1,7 @@
 import 'package:asi_takip/service/auth.dart';
 import 'package:asi_takip/login.dart';
 import 'package:flutter/material.dart';
+// ignore_for_file: prefer_const_constructors
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -158,8 +159,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             height: size.height * 0.08,
                           ),
                           InkWell(
-                            onTap: () {
-                              _authService
+                            onTap: () async{
+                              await _authService
                                   .register(
                                   _nameController.text,
                                   _emailController.text,

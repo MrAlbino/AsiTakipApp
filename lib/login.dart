@@ -4,6 +4,7 @@ import 'package:asi_takip/home.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+// ignore_for_file: prefer_const_constructors
 
 class LoginPage extends StatefulWidget {
   @override

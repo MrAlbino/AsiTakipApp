@@ -20,7 +20,7 @@ class AuthService{
     .set({
       'username':username,
       'email':email,
-      'todo_list':[]
+      'children':[]
     });
     return user.user;
   }
