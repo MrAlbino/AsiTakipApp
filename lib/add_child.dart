@@ -2,14 +2,14 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import './home.dart';
-//import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:uuid/uuid.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 import 'package:google_fonts/google_fonts.dart';
-//import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-//var uuid = const Uuid();
-//final FirebaseAuth _auth = FirebaseAuth.instance;
+var uuid = const Uuid();
+final FirebaseAuth _auth = FirebaseAuth.instance;
 
 
 class AddChildPage extends StatefulWidget{
@@ -35,16 +35,18 @@ class _AddChildPage extends State<AddChildPage>{
       });
   }
 
-  //final _fs=  FirebaseFirestore.instance;
+  final _fs=  FirebaseFirestore.instance;
 
 
   TextEditingController nameController = TextEditingController();
-  TextEditingController explanationController = TextEditingController();
-  TextEditingController destinationDayController = TextEditingController();
+  TextEditingController surnameController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
 
+    CollectionReference childrenRef= _fs.collection('Children');
+    CollectionReference usersRef= _fs.collection('Users');
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -98,7 +100,7 @@ class _AddChildPage extends State<AddChildPage>{
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
-                      controller: nameController,
+                      controller: surnameController,
                     ),
                   ],
                 )
@@ -124,6 +126,34 @@ class _AddChildPage extends State<AddChildPage>{
                   ],
                 )
                 ),
+              ),
+              Expanded(
+                flex: 1,
+
+                child: TextButton(
+                  onPressed: () async{
+                    User? user =_auth.currentUser;
+                    String userId = user!.uid;
+                    Map<String, dynamic> childData= {
+                      'name': nameController.text,
+                      'surname': surnameController.text,
+                      'birthOfDate': selectedDate,
+                    };
+
+                    var id=uuid.v4();
+                    await childrenRef.doc((id)).set(childData);
+
+                    await usersRef.doc(userId).update({'children':FieldValue.arrayUnion([id])});
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder:(context)=> HomePage()));
+                  },
+                  child: const Text('Oluştur'),
+                  style: ButtonStyle(elevation: MaterialStateProperty.all(2), shape: MaterialStateProperty.all(const CircleBorder()),
+                    backgroundColor: MaterialStateProperty.all(Colors.orange), foregroundColor: MaterialStateProperty.all(Colors.white),
+                  ),
+                ),
+
               ),
             ],
           ),
