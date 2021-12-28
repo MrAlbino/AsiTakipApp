@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          backgroundColor: Colors.orange,
+          backgroundColor: Colors.blue.shade300,
           title: Text("MUST",
             style: GoogleFonts.pacifico(fontSize: 25,color:Colors.white),
 
@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
               height: size.height * .5,
               width: size.width * .85,
               decoration: BoxDecoration(
-                  color: Colors.orange.withOpacity(.85),
+                  color: Colors.blue.withOpacity(.75),
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                   boxShadow: [
                     BoxShadow(

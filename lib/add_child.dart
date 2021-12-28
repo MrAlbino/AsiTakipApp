@@ -50,8 +50,8 @@ class _AddChildPage extends State<AddChildPage>{
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: Colors.orange,
-        title:  Text("Asi",
+        backgroundColor: Colors.blue.shade300,
+        title:  Text("Cocuk ekle",
           style: GoogleFonts.pacifico(fontSize: 25,color:Colors.white),
 
         ),
@@ -160,7 +160,7 @@ class _AddChildPage extends State<AddChildPage>{
                   },
                   child: const Text('Oluştur'),
                   style: ButtonStyle(elevation: MaterialStateProperty.all(2), shape: MaterialStateProperty.all(const CircleBorder()),
-                    backgroundColor: MaterialStateProperty.all(Colors.orange), foregroundColor: MaterialStateProperty.all(Colors.white),
+                    backgroundColor: MaterialStateProperty.all(Colors.indigo), foregroundColor: MaterialStateProperty.all(Colors.white),
                   ),
                 ),
 

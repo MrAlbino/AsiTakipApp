@@ -30,8 +30,8 @@ class _HomePageState extends State<HomePage>{
 
         key: _NavKey,
         items: [
-          Icon((myindex == 0) ? Icons.home_outlined : Icons.home),
-          Icon((myindex == 1) ? Icons.message : Icons.message_outlined),
+          Icon((myindex == 0) ? Icons.child_care : Icons.child_care_outlined),
+          Icon((myindex == 1) ? Icons.local_hospital : Icons.local_hospital_outlined),
           Icon((myindex == 2) ? Icons.logout : Icons.logout_outlined),
         ],
         buttonBackgroundColor: Colors.white,
@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage>{
 
           });
         },
-        animationCurve: Curves.fastLinearToSlowEaseIn, color: Colors.orange,
+        animationCurve: Curves.fastLinearToSlowEaseIn, color: Colors.blue.shade300,
       ),
       body: PagesAll[myindex],
     );

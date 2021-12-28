@@ -43,8 +43,8 @@ class _ChildrenPageState extends State<ChildrenPage>{
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: Colors.orange,
-        title:  Text("MUST",
+        backgroundColor: Colors.blue.shade300,
+        title:  Text("cocuklar",
           style: GoogleFonts.pacifico(fontSize: 25,color:Colors.white),
 
         ),
