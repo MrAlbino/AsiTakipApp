@@ -1,9 +1,13 @@
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import './home.dart';
 //import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:uuid/uuid.dart';
 import 'package:google_fonts/google_fonts.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 //var uuid = const Uuid();
 //final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -55,7 +59,7 @@ class _AddChildPage extends State<AddChildPage>{
                 child: MyContainer(child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children:  [
-                    const Text("Hedef Adı",style:TextStyle(
+                    const Text("Adı",style:TextStyle(
                         color:Colors.black54,fontSize: 20,fontWeight: FontWeight.bold
                     ),
                     ),
@@ -76,16 +80,44 @@ class _AddChildPage extends State<AddChildPage>{
                 child: MyContainer(child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children:  [
-                    const Text("Hedef Açıklaması",style:TextStyle(
+                    const Text("Soyadı",style:TextStyle(
                         color:Colors.black54,fontSize: 20,fontWeight: FontWeight.bold
                     ),
                     ),
                     TextFormField(
                       style: const TextStyle(
-                          color:Colors.black54,fontSize: 20,fontWeight: FontWeight.bold
+                        color: Colors.black54,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                      controller: explanationController,
+                      controller: nameController,
                     ),
+                  ],
+                )
+                ),
+              ),
+
+              Expanded(
+                flex: 2,
+                child: MyContainer(child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:  [
+                    const Text("Dogum Tarihi",style:TextStyle(
+                        color:Colors.black54,fontSize: 20,fontWeight: FontWeight.bold
+                    ),
+                    ),
+                    DateTimePicker(
+                      initialValue: '',
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                      dateLabelText: 'Date',
+                      onChanged: (val) => print(val),
+                      validator: (val) {
+                        print(val);
+                        return null;
+                      },
+                      onSaved: (val) => print(val),
+                    )
                   ],
                 )
                 ),
