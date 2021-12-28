@@ -14,7 +14,7 @@ class _HomePageState extends State<HomePage>{
 
   GlobalKey _NavKey = GlobalKey();
   AuthService _authService = AuthService();
-  var PagesAll = [HomePage(),AddChildPage()];
+  var PagesAll = [AddChildPage(),AddChildPage()];
 
   var myindex =0;
 
@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage>{
           setState(() {
 
             if(index==2){
-              _authService.signOut();
+              //_authService.signOut();
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder:(context)=> LoginPage()));
