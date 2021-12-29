@@ -6,9 +6,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class VaccinePage extends StatefulWidget{
-  final String child_id;
+  final String childId;
+  final String childName;
+  final String childSurname;
+  final int userDay;
 
-  const VaccinePage({Key? key,required this.child_id}) : super(key: key);
+  const VaccinePage({Key? key,required this.childId,required this.childName,required this.childSurname,required this.userDay}) : super(key: key);
 
   @override
   _VaccinePageState createState()=> _VaccinePageState();
@@ -20,18 +23,24 @@ class _VaccinePageState extends State<VaccinePage>{
 
 
 
-  Color getMyColor(bool isExist) {
+  Color getMyColor(int userDay,int vaccineDay,bool isExist) {
     if (isExist) {
       return Colors.green;
     }
-    return Colors.red;
+    else if(vaccineDay<userDay){
+      return Colors.red;
 
+    }
+    else if(vaccineDay-userDay<=7&&vaccineDay-userDay>0){
+      return Colors.yellow;
+    }
+    return Colors.grey;
   }
 
 
   @override
   Widget build(BuildContext context) {
-    var childrenRef = _fs.collection('Children').doc(widget.child_id);
+    var childrenRef = _fs.collection('Children').doc(widget.childId);
     var childrenRef2=_fs.collection('Children');
     CollectionReference vaccinesRef= _fs.collection('Vaccines');
     bool isExist=false;
@@ -39,8 +48,8 @@ class _VaccinePageState extends State<VaccinePage>{
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: Colors.orange,
-        title:  Text('Aşı Listesi',
+        backgroundColor: Colors.blue.shade300,
+        title:  Text(widget.childName+' '+widget.childSurname+' '+widget.userDay.toString()+' günlük',
           style: GoogleFonts.pacifico(fontSize: 25,color:Colors.white),
 
         ),
@@ -68,7 +77,7 @@ class _VaccinePageState extends State<VaccinePage>{
                             asyncSnapshot.data.docs;
                         List<DocumentSnapshot> listOfDocumentSnap2=asyncSnapshot1.data.docs;
                         for(var doc in listOfDocumentSnap2){
-                          if(doc.id==widget.child_id){
+                          if(doc.id==widget.childId){
 
                             vaccines=doc['vaccines'];
                           }
@@ -80,7 +89,7 @@ class _VaccinePageState extends State<VaccinePage>{
                               isExist=vaccines.contains(listOfDocumentSnap[index].id);
 
                               return Card(
-                                color:getMyColor(isExist),
+                                color:getMyColor(widget.userDay,listOfDocumentSnap[index]['ejectionDay'],isExist),
 
                                 child: ListTile(
                                   title: Text(
@@ -93,14 +102,14 @@ class _VaccinePageState extends State<VaccinePage>{
                                     mainAxisSize: MainAxisSize.min,
                                     children: [  if(isExist)...[
                                       IconButton(
-                                        icon: const Icon(Icons.delete),
+                                        icon: const Icon(Icons.undo),
                                         onPressed: () async {
 
                                           childrenRef.update({'vaccines':FieldValue.arrayRemove([listOfDocumentSnap[index].id])});
                                         },
                                       ),
                                     ]
-                                    else if(true)...[
+                                    else if(listOfDocumentSnap[index]['ejectionDay']<widget.userDay)...[
                                         IconButton(
                                           icon: const Icon(Icons.assignment_turned_in),
                                           onPressed: () async {

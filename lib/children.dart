@@ -1,4 +1,3 @@
-import 'package:asi_takip/add_child.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -38,7 +37,7 @@ class _ChildrenPageState extends State<ChildrenPage>{
     CollectionReference _usersRef= _fs.collection('Users');
     final User? user =_auth.currentUser;
     final userId = user!.uid;
-
+    final now = DateTime.now();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -76,7 +75,7 @@ class _ChildrenPageState extends State<ChildrenPage>{
                                     '${listOfDocumentSnap[index]['name']+" "+listOfDocumentSnap[index]['surname']}',
                                     style: const TextStyle(fontSize: 24)),
                                 subtitle: Text(
-                                    '${DateFormat('dd-MM-yyyy').format(DateTime.parse((listOfDocumentSnap[index]['birthOfDate']).toDate().toString()))}',
+                                    DateFormat('dd-MM-yyyy').format(DateTime.parse((listOfDocumentSnap[index]['birthOfDate']).toDate().toString())),
                                     style: const TextStyle(fontSize: 16)),
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -97,11 +96,16 @@ class _ChildrenPageState extends State<ChildrenPage>{
                                       icon: const Icon(Icons.arrow_forward),
                                       onPressed: ()  {
 
+                                        var userAge=daysBetween(DateTime.parse((listOfDocumentSnap[index]['birthOfDate']).toDate().toString()),now);
+
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(builder: (context) => VaccinePage(
 
-                                             child_id : listOfDocumentSnap[index].id,
+                                             childId : listOfDocumentSnap[index].id,
+                                             childName:listOfDocumentSnap[index]['name'],
+                                             childSurname:listOfDocumentSnap[index]['surname'],
+                                             userDay:userAge
                                           )),
                                         );
 
@@ -128,4 +132,11 @@ class _ChildrenPageState extends State<ChildrenPage>{
       ),
     );
   }
+}
+
+
+int daysBetween(DateTime from, DateTime to) {
+  from = DateTime(from.year, from.month, from.day);
+  to = DateTime(to.year, to.month, to.day);
+  return (to.difference(from).inHours / 24).round();
 }
