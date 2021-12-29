@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
+
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class VaccinePage extends StatefulWidget{
@@ -21,15 +20,11 @@ class _VaccinePageState extends State<VaccinePage>{
 
 
 
-  Color getMyColor(DateTime date, bool done) {
-    if (done) {
+  Color getMyColor(bool isExist) {
+    if (isExist) {
       return Colors.green;
-    } else if(DateTime.now().isBefore(date)){
-      return Colors.orange.shade200;
     }
-    else{
-      return Colors.red.shade500;
-    }
+    return Colors.red;
 
   }
 
@@ -37,27 +32,15 @@ class _VaccinePageState extends State<VaccinePage>{
   @override
   Widget build(BuildContext context) {
     var childrenRef = _fs.collection('Children').doc(widget.child_id);
-
-    //childrenRef.get().then( value=> alinanDeger){
-
-    //  Map<String,dynamic> alinanVeri=alinanDeger.data();
-
-   // }
-
-   // var childRef = childrenRef.doc(widget.child_id);
-   // var response = childRef.get();
-    //var map=response;;
-
-    /* CollectionReference todosRef= _fs.collection('Children');
-    CollectionReference _usersRef= _fs.collection('Users');
-    final User? user =_auth.currentUser;
-    final userId = user!.uid;*/
-
+    var childrenRef2=_fs.collection('Children');
+    CollectionReference vaccinesRef= _fs.collection('Vaccines');
+    bool isExist=false;
+    var vaccines=[];
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.orange,
-        title:  Text(widget.child_id,
+        title:  Text('Aşı Listesi',
           style: GoogleFonts.pacifico(fontSize: 25,color:Colors.white),
 
         ),
@@ -67,63 +50,82 @@ class _VaccinePageState extends State<VaccinePage>{
         child: Container(
           child: Column(
             children: [
-              Text("response.toString()",
-                style: GoogleFonts.pacifico(fontSize: 25,color:Colors.white),
+              StreamBuilder<QuerySnapshot>(
+                stream: childrenRef2.snapshots(),
+                builder: (BuildContext context, AsyncSnapshot asyncSnapshot1){
+                return StreamBuilder<QuerySnapshot>(
+                  /// Neyi dinlediğimiz bilgisi, hangi streami
+                  stream: vaccinesRef.snapshots(),
+                  /// Streamden her yerni veri aktığında, aşağıdaki metodu çalıştır
+                  builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
 
+                    if (asyncSnapshot.hasError) {
+                      return const Center(
+                          child: Text('Bir Hata Oluştu, Tekrar Deneyiniz'));
+                    } else {
+                      if (asyncSnapshot.hasData) {
+                        List<DocumentSnapshot> listOfDocumentSnap =
+                            asyncSnapshot.data.docs;
+                        List<DocumentSnapshot> listOfDocumentSnap2=asyncSnapshot1.data.docs;
+                        for(var doc in listOfDocumentSnap2){
+                          if(doc.id==widget.child_id){
+
+                            vaccines=doc['vaccines'];
+                          }
+                        }
+                        return Flexible(
+                          child: ListView.builder(
+                            itemCount: listOfDocumentSnap.length,
+                            itemBuilder: (context, index) {
+                              isExist=vaccines.contains(listOfDocumentSnap[index].id);
+
+                              return Card(
+                                color:getMyColor(isExist),
+
+                                child: ListTile(
+                                  title: Text(
+                                      '${listOfDocumentSnap[index]['name']}',
+                                      style: const TextStyle(fontSize: 24)),
+                                  subtitle: Text(
+                                      "Aşı Günü: "+(listOfDocumentSnap[index]['ejectionDay']).toString(),
+                                      style: const TextStyle(fontSize: 16)),
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [  if(isExist)...[
+                                      IconButton(
+                                        icon: const Icon(Icons.delete),
+                                        onPressed: () async {
+
+                                          childrenRef.update({'vaccines':FieldValue.arrayRemove([listOfDocumentSnap[index].id])});
+                                        },
+                                      ),
+                                    ]
+                                    else if(true)...[
+                                        IconButton(
+                                          icon: const Icon(Icons.assignment_turned_in),
+                                          onPressed: () async {
+
+                                            await childrenRef.update({'vaccines':FieldValue.arrayUnion([listOfDocumentSnap[index].id])});
+                                          },
+                                        ),
+
+                                      ]
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    }
+                  },
+                );}
               ),
-              // StreamBuilder<QuerySnapshot>(
-              //   /// Neyi dinlediğimiz bilgisi, hangi streami
-              //  // stream: todosRef.where('parent' ,isEqualTo: userId).snapshots(),
-              //   /// Streamden her yerni veri aktığında, aşağıdaki metodu çalıştır
-              //   builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
-              //     if (asyncSnapshot.hasError) {
-              //       return const Center(
-              //           child: Text('Bir Hata Oluştu, Tekrar Deneyiniz'));
-              //     } else {
-              //       if (asyncSnapshot.hasData) {
-              //         List<DocumentSnapshot> listOfDocumentSnap =
-              //             asyncSnapshot.data.docs;
-              //         return Flexible(
-              //           child: ListView.builder(
-              //             itemCount: listOfDocumentSnap.length,
-              //             itemBuilder: (context, index) {
-              //               return Card(
-              //
-              //                 child: ListTile(
-              //                   title: Text(
-              //                       '${listOfDocumentSnap[index]['name']+" "+listOfDocumentSnap[index]['surname']}',
-              //                       style: const TextStyle(fontSize: 24)),
-              //                   subtitle: Text(
-              //                       DateFormat('dd-MM-yyyy').format(DateTime.parse((listOfDocumentSnap[index]['birthOfDate']).toDate().toString())),
-              //                       style: const TextStyle(fontSize: 16)),
-              //                   trailing: Row(
-              //                       mainAxisSize: MainAxisSize.min,
-              //                       children: [
-              //                         IconButton(
-              //                           icon: const Icon(Icons.delete),
-              //                           onPressed: () async {
-              //                             var todoId= listOfDocumentSnap[index].id;
-              //                             await listOfDocumentSnap[index]
-              //                                 .reference
-              //                                 .delete();
-              //                             _usersRef.doc(userId).update({'children':FieldValue.arrayRemove([todoId])});
-              //                           },
-              //                         ),
-              //                       ]
-              //                   ),
-              //                 ),
-              //               );
-              //             },
-              //           ),
-              //         );
-              //       } else {
-              //         return const Center(
-              //           child: CircularProgressIndicator(),
-              //         );
-              //       }
-              //     }
-              //   },
-              // ),
             ],
           ),
         ),

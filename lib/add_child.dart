@@ -148,6 +148,7 @@ class _AddChildPage extends State<AddChildPage>{
                       'surname': surnameController.text,
                       'parent': userId,
                       'birthOfDate': selectedDate,
+                      'vaccines':[]
                     };
 
                     var id=uuid.v4();
