@@ -97,9 +97,13 @@ class _ChildrenPageState extends State<ChildrenPage>{
                                     IconButton(
                                       icon: const Icon(Icons.arrow_forward),
                                       onPressed: ()  {
+
                                         Navigator.push(
                                           context,
-                                          MaterialPageRoute(builder: (context) => AddChildPage()),
+                                          MaterialPageRoute(builder: (context) => VaccinePage(
+
+                                             child_id : listOfDocumentSnap[index].id,
+                                          )),
                                         );
 
                                       },
