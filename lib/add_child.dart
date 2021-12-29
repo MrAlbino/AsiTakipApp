@@ -1,4 +1,3 @@
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import './home.dart';
@@ -6,11 +5,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:asi_takip/service/auth.dart';
+import 'login.dart';
 var uuid = const Uuid();
 final FirebaseAuth _auth = FirebaseAuth.instance;
-
+AuthService _authService = AuthService();
 
 class AddChildPage extends StatefulWidget{
   const AddChildPage({Key? key}) : super(key: key);
@@ -51,15 +50,31 @@ class _AddChildPage extends State<AddChildPage>{
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.blue.shade300,
-        title:  Text("Cocuk ekle",
+        title:  Text("Çocuk Ekle",
           style: GoogleFonts.pacifico(fontSize: 25,color:Colors.white),
 
         ),
         centerTitle: true,
+
+        actions: <Widget>[
+          // First button - decrement
+          IconButton(
+            icon: const Icon(Icons.logout_outlined), // The "-" icon
+            onPressed:() {
+              _authService.signOut();
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder:(context)=> LoginPage()));} // The `_decrementCounter` function
+          ),
+
+          // Second button - increment
+        ],
+
       ),
       body:
       Form(
         child: Container(
+
           margin: const EdgeInsets.fromLTRB(0,0,0,12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -118,7 +133,8 @@ class _AddChildPage extends State<AddChildPage>{
 
               Expanded(
                 flex: 2,
-                child: MyContainer(child: Column(
+                child: MyContainer(
+                    child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children:  [
 
@@ -139,32 +155,82 @@ class _AddChildPage extends State<AddChildPage>{
               Expanded(
                 flex: 1,
 
-                child: TextButton(
-                  onPressed: () async{
-                    User? user =_auth.currentUser;
-                    String userId = user!.uid;
-                    Map<String, dynamic> childData= {
-                      'name': nameController.text,
-                      'surname': surnameController.text,
-                      'parent': userId,
-                      'birthOfDate': selectedDate,
-                      'vaccines':[]
-                    };
+                // child: TextButton(
+                //   onPressed: () async{
+                //     User? user =_auth.currentUser;
+                //     String userId = user!.uid;
+                //     Map<String, dynamic> childData= {
+                //       'name': nameController.text,
+                //       'surname': surnameController.text,
+                //       'parent': userId,
+                //       'birthOfDate': selectedDate,
+                //       'vaccines':[]
+                //     };
+                //
+                //     var id=uuid.v4();
+                //     await childrenRef.doc((id)).set(childData);
+                //
+                //     await usersRef.doc(userId).update({'children':FieldValue.arrayUnion([id])});
+                //     Navigator.pushReplacement(
+                //         context,
+                //         MaterialPageRoute(builder:(context)=> HomePage()));
+                //   },
+                //   child: const Text('Oluştur'),
+                //   style: ButtonStyle(elevation: MaterialStateProperty.all(2), shape: MaterialStateProperty.all(const CircleBorder()),
+                //     backgroundColor: MaterialStateProperty.all(Colors.indigo), foregroundColor: MaterialStateProperty.all(Colors.white),
+                //   ),
+                // ),
+                child :GestureDetector(
+                  onTap: () async{
 
-                    var id=uuid.v4();
-                    await childrenRef.doc((id)).set(childData);
+                        User? user =_auth.currentUser;
+                         String userId = user!.uid;
+                        Map<String, dynamic> childData= {
+                           'name': nameController.text,
+                          'surname': surnameController.text,
+                          'parent': userId,
+                          'birthOfDate': selectedDate,
+                           'vaccines':[]
+                         };
 
-                    await usersRef.doc(userId).update({'children':FieldValue.arrayUnion([id])});
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder:(context)=> HomePage()));
+                         var id=uuid.v4();
+                         await childrenRef.doc((id)).set(childData);
+
+                         await usersRef.doc(userId).update({'children':FieldValue.arrayUnion([id])});
+                         Navigator.pushReplacement(
+                             context,
+                             MaterialPageRoute(builder:(context)=> HomePage()));
+
+
+
                   },
-                  child: const Text('Oluştur'),
-                  style: ButtonStyle(elevation: MaterialStateProperty.all(2), shape: MaterialStateProperty.all(const CircleBorder()),
-                    backgroundColor: MaterialStateProperty.all(Colors.indigo), foregroundColor: MaterialStateProperty.all(Colors.white),
+                  child: Container(
+                    width: 300,
+                    margin: const EdgeInsets.fromLTRB(100, 10, 100, 10),
+                    height: 100,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.blue,
+                          Colors.blue[200]!,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Oluştur',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-
               ),
             ],
           ),
@@ -183,12 +249,28 @@ class MyContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+
+
+
       child: child,
-      margin: const EdgeInsets.fromLTRB(12,5,12,0),
+      margin: const EdgeInsets.fromLTRB(12,12,12,12),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)
 
         ,color: colorUser,
+        boxShadow: const [
+          BoxShadow(
+              color: Color(0xFF4ca5d8),
+              offset: Offset(5, 5),
+              blurRadius: 20.0,
+              spreadRadius: 1.0),
+          BoxShadow(
+              color: Colors.white,
+              offset: Offset(-1.0, -1.0),
+              blurRadius: 15.0,
+              spreadRadius: 1.0),
+        ],
       ),
+
     );
   }
 }

@@ -4,8 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import './vaccine.dart';
-final FirebaseAuth _auth = FirebaseAuth.instance;
+import 'package:asi_takip/service/auth.dart';
 
+import 'login.dart';
+final FirebaseAuth _auth = FirebaseAuth.instance;
+AuthService _authService = AuthService();
 
 class ChildrenPage extends StatefulWidget{
   const ChildrenPage({Key? key}) : super(key: key);
@@ -42,11 +45,26 @@ class _ChildrenPageState extends State<ChildrenPage>{
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.blue.shade300,
-        title:  Text("cocuklar",
+        title:  Text("Çocuklarım",
           style: GoogleFonts.pacifico(fontSize: 25,color:Colors.white),
 
         ),
         centerTitle: true,
+
+        actions: <Widget>[
+          // First button - decrement
+          IconButton(
+              icon: const Icon(Icons.logout_outlined), // The "-" icon
+              onPressed:() {
+                _authService.signOut();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder:(context)=> LoginPage()));} // The `_decrementCounter` function
+          ),
+
+          // Second button - increment
+        ],
+
       ),
       body:Center(
         child: Container(
@@ -140,3 +158,4 @@ int daysBetween(DateTime from, DateTime to) {
   to = DateTime(to.year, to.month, to.day);
   return (to.difference(from).inHours / 24).round();
 }
+

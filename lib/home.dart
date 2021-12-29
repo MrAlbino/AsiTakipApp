@@ -1,3 +1,4 @@
+import 'package:asi_takip/vaccinesinfo.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:asi_takip/service/auth.dart';
@@ -15,7 +16,7 @@ class _HomePageState extends State<HomePage>{
 
   GlobalKey _NavKey = GlobalKey();
   AuthService _authService = AuthService();
-  var PagesAll = [ChildrenPage(),AddChildPage()];
+  var PagesAll = [ChildrenPage(),AddChildPage(),VaccineInfoPage()];
 
   var myindex =0;
 
@@ -32,24 +33,16 @@ class _HomePageState extends State<HomePage>{
         items: [
           Icon((myindex == 0) ? Icons.child_care : Icons.child_care_outlined),
           Icon((myindex == 1) ? Icons.local_hospital : Icons.local_hospital_outlined),
-          Icon((myindex == 2) ? Icons.logout : Icons.logout_outlined),
+          Icon((myindex == 2) ? Icons.article : Icons.article_outlined),
         ],
         buttonBackgroundColor: Colors.white,
         onTap: (index){
           setState(() {
-
-            if(index==2){
-              //_authService.signOut();
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder:(context)=> LoginPage()));
-            }
-            else{
               myindex = index;
-            }
-
           });
         },
+        //Curves.fastLinearToSlowEaseIn
+       // color: Colors.blue.shade300,
         animationCurve: Curves.fastLinearToSlowEaseIn, color: Colors.blue.shade300,
       ),
       body: PagesAll[myindex],

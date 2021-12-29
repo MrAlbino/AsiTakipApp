@@ -24,8 +24,8 @@ class _LoginPageState extends State<LoginPage> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.blue.shade300,
-          title: Text("MUST",
-            style: GoogleFonts.pacifico(fontSize: 25,color:Colors.white),
+          title: Text("Hoşgeldiniz",
+            style: GoogleFonts.capriola(fontSize: 25,color:Colors.white),
 
           ),
           centerTitle: true,

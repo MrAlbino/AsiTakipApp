@@ -1,15 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
+
+
+extension HexColor on Color {
+  /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
+  static Color fromHex(String hexString) {
+    final buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+    buffer.write(hexString.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
+  }
+
+  /// Prefixes a hash sign if [leadingHashSign] is set to true (default is true).
+  String toHex({bool leadingHashSign = true}) => '${leadingHashSign ? '#' : ''}'
+      '${alpha.toRadixString(16).padLeft(2, '0')}'
+      '${red.toRadixString(16).padLeft(2, '0')}'
+      '${green.toRadixString(16).padLeft(2, '0')}'
+      '${blue.toRadixString(16).padLeft(2, '0')}';
+}
+
 
 class VaccinePage extends StatefulWidget{
   final String childId;
   final String childName;
   final String childSurname;
   final int userDay;
+
+
+
 
   const VaccinePage({Key? key,required this.childId,required this.childName,required this.childSurname,required this.userDay}) : super(key: key);
 
@@ -22,21 +42,19 @@ class _VaccinePageState extends State<VaccinePage>{
   final _fs=  FirebaseFirestore.instance;
 
 
-
   Color getMyColor(int userDay,int vaccineDay,bool isExist) {
+
     if (isExist) {
-      return Colors.green;
+      return  HexColor.fromHex("#B9F594");
     }
     else if(vaccineDay<userDay){
-      return Colors.red;
-
+      return HexColor.fromHex("#F54646");
     }
     else if(vaccineDay-userDay<=7&&vaccineDay-userDay>0){
-      return Colors.yellow;
+      return HexColor.fromHex("#EEF55E");
     }
     return Colors.grey;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +96,6 @@ class _VaccinePageState extends State<VaccinePage>{
                         List<DocumentSnapshot> listOfDocumentSnap2=asyncSnapshot1.data.docs;
                         for(var doc in listOfDocumentSnap2){
                           if(doc.id==widget.childId){
-
                             vaccines=doc['vaccines'];
                           }
                         }
