@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:asi_takip/service/auth.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
+import 'login.dart';
+
 
 class VaccineInfoPage extends StatefulWidget{
 
@@ -17,7 +18,7 @@ class VaccineInfoPage extends StatefulWidget{
 
 class _VaccineInfoPageState extends State<VaccineInfoPage>{
   final _fs=  FirebaseFirestore.instance;
-
+  AuthService _authService = AuthService();
 
 
   Color getMyColor(bool isExist) {
@@ -32,7 +33,7 @@ class _VaccineInfoPageState extends State<VaccineInfoPage>{
   @override
   Widget build(BuildContext context) {
     CollectionReference vaccinesRef= _fs.collection('Vaccines');
-    bool isExist=false;
+
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -43,6 +44,19 @@ class _VaccineInfoPageState extends State<VaccineInfoPage>{
 
         ),
         centerTitle: true,
+        actions: <Widget>[
+          // First button - decrement
+          IconButton(
+              icon: const Icon(Icons.logout_outlined), // The "-" icon
+              onPressed:() {
+                _authService.signOut();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder:(context)=> LoginPage()));} // The `_decrementCounter` function
+          ),
+
+          // Second button - increment
+        ],
       ),
       body:Center(
         child: Container(

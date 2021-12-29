@@ -26,7 +26,6 @@ class _LoginPageState extends State<LoginPage> {
           backgroundColor: Colors.blue.shade300,
           title: Text("Hoşgeldiniz",
             style: GoogleFonts.capriola(fontSize: 25,color:Colors.white),
-
           ),
           centerTitle: true,
         ),
@@ -39,12 +38,19 @@ class _LoginPageState extends State<LoginPage> {
               decoration: BoxDecoration(
                   color: Colors.blue.withOpacity(.75),
                   borderRadius: BorderRadius.all(Radius.circular(20)),
-                  boxShadow: [
+                  boxShadow: const[
                     BoxShadow(
-                        color: Colors.grey.withOpacity(.75),
-                        blurRadius: 10,
-                        spreadRadius: 2)
-                  ]),
+                        color: Colors.black,
+                        offset: Offset(1, 1),
+                        blurRadius: 10.0,
+                        spreadRadius: 0),
+                    BoxShadow(
+                        color: Colors.white,
+                        offset: Offset(-5.0, -5.0),
+                        blurRadius: 10.0,
+                        spreadRadius: 0),
+                  ]
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Center(

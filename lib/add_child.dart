@@ -28,10 +28,11 @@ class _AddChildPage extends State<AddChildPage>{
         initialDate: selectedDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
+    if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
       });
+    }
   }
 
   final _fs=  FirebaseFirestore.instance;
@@ -95,7 +96,7 @@ class _AddChildPage extends State<AddChildPage>{
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
 
                         contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       ),
@@ -120,7 +121,7 @@ class _AddChildPage extends State<AddChildPage>{
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
 
                         contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       ),
@@ -138,15 +139,14 @@ class _AddChildPage extends State<AddChildPage>{
                   mainAxisAlignment: MainAxisAlignment.center,
                   children:  [
 
-                    Text("${selectedDate.toLocal()}".split(' ')[0],style:TextStyle(
+                    Text("${selectedDate.toLocal()}".split(' ')[0],style:const TextStyle(
                         color:Colors.black54,fontSize: 20,fontWeight: FontWeight.bold
                     ),),
-                    SizedBox(height: 20.0,),
-
+                    const SizedBox(height: 20.0,),
 
                     ElevatedButton(
                       onPressed: () => _selectDate(context),
-                      child: Text('Doğum Tarihini Seçiniz'),
+                      child: const Text('Doğum Tarihini Seçiniz'),
                     ),
                   ],
                 )
@@ -154,32 +154,6 @@ class _AddChildPage extends State<AddChildPage>{
               ),
               Expanded(
                 flex: 1,
-
-                // child: TextButton(
-                //   onPressed: () async{
-                //     User? user =_auth.currentUser;
-                //     String userId = user!.uid;
-                //     Map<String, dynamic> childData= {
-                //       'name': nameController.text,
-                //       'surname': surnameController.text,
-                //       'parent': userId,
-                //       'birthOfDate': selectedDate,
-                //       'vaccines':[]
-                //     };
-                //
-                //     var id=uuid.v4();
-                //     await childrenRef.doc((id)).set(childData);
-                //
-                //     await usersRef.doc(userId).update({'children':FieldValue.arrayUnion([id])});
-                //     Navigator.pushReplacement(
-                //         context,
-                //         MaterialPageRoute(builder:(context)=> HomePage()));
-                //   },
-                //   child: const Text('Oluştur'),
-                //   style: ButtonStyle(elevation: MaterialStateProperty.all(2), shape: MaterialStateProperty.all(const CircleBorder()),
-                //     backgroundColor: MaterialStateProperty.all(Colors.indigo), foregroundColor: MaterialStateProperty.all(Colors.white),
-                //   ),
-                // ),
                 child :GestureDetector(
                   onTap: () async{
 
@@ -199,7 +173,7 @@ class _AddChildPage extends State<AddChildPage>{
                          await usersRef.doc(userId).update({'children':FieldValue.arrayUnion([id])});
                          Navigator.pushReplacement(
                              context,
-                             MaterialPageRoute(builder:(context)=> HomePage()));
+                             MaterialPageRoute(builder:(context)=> const HomePage()));
 
 
 
