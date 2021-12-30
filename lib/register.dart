@@ -1,5 +1,4 @@
 import 'package:asi_takip/service/auth.dart';
-import 'package:asi_takip/login.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -47,12 +46,18 @@ class _RegisterPageState extends State<RegisterPage> {
                       decoration: BoxDecoration(
                           color: Colors.blue.shade400.withOpacity(.8),
                           borderRadius: BorderRadius.all(Radius.circular(20)),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey.withOpacity(.75),
-                                blurRadius: 10,
-                                spreadRadius: 2)
-                          ]),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.white.withOpacity(0.8),
+                            offset: Offset(-6.0, -6.0),
+                            blurRadius: 12.0,
+                          ),
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.35),
+                            offset: Offset(6.0, 6.0),
+                            blurRadius: 10.0,
+                          ),
+                        ],),
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Center(
@@ -201,10 +206,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           _emailController.text,
                                           _passwordController.text)
                                           .then((value) {
-                                        return Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => LoginPage()));
+                                        return Navigator.pop(context);
                                       });
                                     }on FirebaseAuthException catch(error){
                                       errorMessage=error.message!;

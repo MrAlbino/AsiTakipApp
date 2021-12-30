@@ -44,12 +44,18 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: BoxDecoration(
                       color: Colors.blue.shade400.withOpacity(.85),
                       borderRadius: BorderRadius.all(Radius.circular(20)),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey.withOpacity(.75),
-                            blurRadius: 10,
-                            spreadRadius: 2)
-                      ]),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.white.withOpacity(0.8),
+                        offset: Offset(-6.0, -6.0),
+                        blurRadius: 12.0,
+                      ),
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.35),
+                        offset: Offset(6.0, 6.0),
+                        blurRadius: 10.0,
+                      ),
+                    ],),
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Center(
