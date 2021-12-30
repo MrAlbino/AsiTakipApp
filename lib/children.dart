@@ -87,7 +87,6 @@ class _ChildrenPageState extends State<ChildrenPage>{
                           itemCount: listOfDocumentSnap.length,
                           itemBuilder: (context, index) {
                             return Card(
-
                               child: ListTile(
                                 title: Text(
                                     '${listOfDocumentSnap[index]['name']+" "+listOfDocumentSnap[index]['surname']}',
@@ -98,8 +97,6 @@ class _ChildrenPageState extends State<ChildrenPage>{
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-
-
                                     IconButton(
                                       icon: const Icon(Icons.delete),
                                       onPressed: () async {
@@ -113,13 +110,10 @@ class _ChildrenPageState extends State<ChildrenPage>{
                                     IconButton(
                                       icon: const Icon(Icons.arrow_forward),
                                       onPressed: ()  {
-
                                         var userAge=daysBetween(DateTime.parse((listOfDocumentSnap[index]['birthOfDate']).toDate().toString()),now);
-
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(builder: (context) => VaccinePage(
-
                                              childId : listOfDocumentSnap[index].id,
                                              childName:listOfDocumentSnap[index]['name'],
                                              childSurname:listOfDocumentSnap[index]['surname'],
@@ -151,7 +145,6 @@ class _ChildrenPageState extends State<ChildrenPage>{
     );
   }
 }
-
 
 int daysBetween(DateTime from, DateTime to) {
   from = DateTime(from.year, from.month, from.day);

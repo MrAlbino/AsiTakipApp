@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
-
 extension HexColor on Color {
   /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
   static Color fromHex(String hexString) {
@@ -21,15 +19,11 @@ extension HexColor on Color {
       '${blue.toRadixString(16).padLeft(2, '0')}';
 }
 
-
 class VaccinePage extends StatefulWidget{
   final String childId;
   final String childName;
   final String childSurname;
   final int userDay;
-
-
-
 
   const VaccinePage({Key? key,required this.childId,required this.childName,required this.childSurname,required this.userDay}) : super(key: key);
 
@@ -37,10 +31,8 @@ class VaccinePage extends StatefulWidget{
   _VaccinePageState createState()=> _VaccinePageState();
 }
 
-
 class _VaccinePageState extends State<VaccinePage>{
   final _fs=  FirebaseFirestore.instance;
-
 
   Color getMyColor(int userDay,int vaccineDay,bool isExist) {
 
@@ -126,7 +118,7 @@ class _VaccinePageState extends State<VaccinePage>{
                                         },
                                       ),
                                     ]
-                                    else if(listOfDocumentSnap[index]['ejectionDay']<widget.userDay)...[
+                                    else if(listOfDocumentSnap[index]['ejectionDay']-widget.userDay<=7)...[
                                         IconButton(
                                           icon: const Icon(Icons.assignment_turned_in),
                                           onPressed: () async {

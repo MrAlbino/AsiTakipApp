@@ -1,22 +1,18 @@
 import 'package:asi_takip/service/auth.dart';
-import 'package:asi_takip/register.dart';
-import 'package:asi_takip/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:asi_takip/reset.dart';
 // ignore_for_file: prefer_const_constructors
 
-class LoginPage extends StatefulWidget {
+class ResetPasswordPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _ResetPasswordState createState() => _ResetPasswordState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _ResetPasswordState extends State<ResetPasswordPage> {
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _key=GlobalKey<FormState>();
-  AuthService _authService = AuthService();
+  final AuthService _authService = AuthService();
   bool isLoading=false;
   String errorMessage='';
 
@@ -27,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.blue.shade300,
-          title: Text("Hoşgeldiniz",
+          title: Text("Sıfırlama Maili Gönder",
             style: GoogleFonts.pacifico(fontSize: 25,color:Colors.white),
 
           ),
@@ -39,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Container(
-                  height: size.height * .45,
+                  height: size.height * .3,
                   width: size.width * .85,
                   decoration: BoxDecoration(
                       color: Colors.blue.shade400.withOpacity(.85),
@@ -85,57 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                           SizedBox(
                             height: size.height * 0.02,
                           ),
-                          TextFormField(
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                              cursorColor: Colors.white,
-                              controller: _passwordController,
-                              validator: validatePassword,
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.vpn_key,
-                                  color: Colors.white,
-                                ),
-                                hintText: 'Parola',
-                                prefixText: ' ',
-                                hintStyle: TextStyle(
-                                  color: Colors.white,
-                                ),
-                                focusColor: Colors.white,
-                                focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                    )),
-                                enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                    )),
-                              )),
-                          SizedBox(
-                            height: size.height * 0.013,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ResetPasswordPage()));
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: const [
-                                Text(
-                                  "Şifreni mi unuttun?",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: size.height * 0.01,
-                          ),
+
                           Center(
                             child: Text(errorMessage,style: TextStyle(color: Colors.red),),
                           ),
@@ -151,20 +97,14 @@ class _LoginPageState extends State<LoginPage> {
                               if(_key.currentState!.validate()){
                                 try{
                                   await _authService
-                                      .signIn(
-                                      _emailController.text, _passwordController.text)
+                                      .resetPassword(
+                                      _emailController.text)
                                       .then((value) {
-                                    return Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => HomePage()));
+                                    return Navigator.pop(context);
                                   });
                                 }on FirebaseAuthException catch(error){
                                   if(error.code=='user-not-found'){
-                                    errorMessage='No user found with this email.';
-                                  }
-                                  else if(error.code=='wrong-password'){
-                                    errorMessage='Wrong email/password combination.';
+                                    errorMessage='Email does not exist.';
                                   }
                                   else{
                                     errorMessage=error.message!;
@@ -195,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                                       width: 25.0,
                                     ):
                                     Text(
-                                      "Giriş yap",
+                                      "Gönder",
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 20,
@@ -207,33 +147,7 @@ class _LoginPageState extends State<LoginPage> {
                           SizedBox(
                             height: size.height * 0.02,
                           ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => RegisterPage()));
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Container(
-                                  height: 1,
-                                  width: 75,
-                                  color: Colors.white,
-                                ),
-                                Text(
-                                  "Kayıt ol",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                Container(
-                                  height: 1,
-                                  width: 75,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
-                          )
+
                         ],
                       ),
                     ),
@@ -244,20 +158,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-String? validateEmail(String? formEmail){
-  if(formEmail==null||formEmail.isEmpty){
+String? validateEmail(String? formEmail) {
+  if (formEmail == null || formEmail.isEmpty) {
     return 'Email address is required.';
   }
   String pattern = r'\w+@\w+\.\w+';
   RegExp regex = RegExp(pattern);
-  if (!regex.hasMatch(formEmail)){
+  if (!regex.hasMatch(formEmail)) {
     return 'Invalid E-mail Address format.';
-  }
-  return null;
-}
-String? validatePassword(String? formPassword){
-  if(formPassword==null||formPassword.isEmpty){
-    return 'Password is required.';
   }
   return null;
 }

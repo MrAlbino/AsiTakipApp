@@ -24,4 +24,7 @@ class AuthService{
     });
     return user.user;
   }
+  resetPassword(String email) async{
+    await _auth.sendPasswordResetEmail(email: email);
+  }
 }
