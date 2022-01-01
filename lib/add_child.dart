@@ -5,11 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:asi_takip/service/auth.dart';
+import 'custom_dialog.dart';
 import 'login.dart';
 var uuid = const Uuid();
 final FirebaseAuth _auth = FirebaseAuth.instance;
-AuthService _authService = AuthService();
 
 class AddChildPage extends StatefulWidget{
   const AddChildPage({Key? key}) : super(key: key);
@@ -62,10 +61,8 @@ class _AddChildPage extends State<AddChildPage>{
           IconButton(
             icon: const Icon(Icons.logout_outlined), // The "-" icon
             onPressed:() {
-              _authService.signOut();
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder:(context)=> LoginPage()));} // The `_decrementCounter` function
+              _showDialog(context);
+            } // The `_decrementCounter` function
           ),
 
           // Second button - increment
@@ -210,6 +207,23 @@ class _AddChildPage extends State<AddChildPage>{
           ),
         ),
       ),
+    );
+  }
+  _showDialog(BuildContext context){
+    BlurryDialog  alert = BlurryDialog("Are you sure you want to exit?",()
+    {
+      Navigator.of(context).pop();
+      _auth.signOut();
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder:(context)=> LoginPage()));
+    });
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

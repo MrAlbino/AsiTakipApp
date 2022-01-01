@@ -1,8 +1,6 @@
 import 'package:asi_takip/vaccinesinfo.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:asi_takip/service/auth.dart';
-import './login.dart';
 import './children.dart';
 import './add_child.dart';
 class HomePage extends StatefulWidget{
@@ -15,7 +13,6 @@ class HomePage extends StatefulWidget{
 class _HomePageState extends State<HomePage>{
 
   GlobalKey _NavKey = GlobalKey();
-  AuthService _authService = AuthService();
   var PagesAll = [ChildrenPage(),AddChildPage(),VaccineInfoPage()];
 
   var myindex =0;
